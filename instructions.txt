@@ -1,0 +1,16 @@
+1: Install Operator
+
+helm repo add cnpg https://cloudnative-pg.github.io/charts \
+helm upgrade --install cnpg \
+  --namespace cnpg-system \
+  --create-namespace \
+  cnpg/cloudnative-pg
+
+
+2: Install Cluster:
+
+helm repo add cnpg https://cloudnative-pg.github.io/charts
+helm upgrade --install agrone-db \
+  --namespace database \
+  --create-namespace \
+  cnpg/cluster -f values.yaml
