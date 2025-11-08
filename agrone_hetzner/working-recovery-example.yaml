@@ -1,0 +1,202 @@
+# Recovery Test Cluster Configuration
+type: postgis
+version:
+  postgis: "3.4"
+  postgresql: "16"
+
+# CRITICAL: Set mode to recovery
+mode: recovery
+
+cluster:
+  instances: 1
+
+  imageName: ""
+
+  imageCatalogRef: {}
+
+  imagePullPolicy: IfNotPresent
+
+  imagePullSecrets: []
+
+  storage:
+    size: 32Gi
+
+  walStorage:
+    enabled: false
+    size: 1Gi
+    storageClass: ""
+
+  postgresUID: -1
+
+  postgresGID: -1
+
+  services: {}
+
+  resources:
+     limits:
+       cpu: 2
+       memory: 5Gi
+     requests:
+       cpu: 500m
+       memory: 2Gi
+
+  priorityClassName: ""
+
+  primaryUpdateMethod: switchover
+
+  primaryUpdateStrategy: unsupervised
+
+  logLevel: "info"
+
+  affinity:
+    topologyKey: topology.kubernetes.io/zone
+
+  certificates: {}
+
+  enableSuperuserAccess: true
+  superuserSecret: ""
+
+  enablePDB: true
+
+  roles: []
+
+  monitoring:
+    enabled: false
+    podMonitor:
+      enabled: true
+      relabelings: []
+      metricRelabelings: []
+    prometheusRule:
+      enabled: true
+      excludeRules: []
+    disableDefaultQueries: false
+    customQueries: []
+    customQueriesSecret: []
+
+  postgresql:
+    parameters:
+      max_connections: "500"
+    synchronous: {}
+    pg_hba: []
+    pg_ident: []
+    shared_preload_libraries: []
+    ldap: {}
+
+  initdb: {}
+
+  serviceAccountTemplate: {}
+
+  additionalLabels: {}
+  annotations: {}
+
+
+
+# Create the S3 credentials secret
+secrets:
+  - name: recovery-s3-creds
+    literals:
+      ACCESS_KEY_ID: "3I6STQIYG5R55JGNDP1Q"
+      ACCESS_SECRET_KEY: "eecSrCkWCpfiv98PZxme32wFX6hmfk6IL3HZkKRu"
+
+# Recovery source reference
+recovery:
+  method: object_store
+  backupName: ""
+  pitrTarget:
+    time: ""
+  endpointCA:
+    create: false
+    name: ""
+    key: ""
+    value: ""
+  backupName: ""
+  clusterName: legacy-postgress-cluster-dev-v1
+  endpointURL: https://hel1.your-objectstorage.com
+  destinationPath: ""
+  provider: s3
+  s3:
+    accessKey: 3I6STQIYG5R55JGNDP1Q
+    bucket: data-team
+    path: /legacy-dev
+    region: us-east-1
+    secretKey: eecSrCkWCpfiv98PZxme32wFX6hmfk6IL3HZkKRu
+  secret:
+    create: true
+  pgBaseBackup:
+    database: app
+    secret: ""
+    owner: ""
+    source:
+      host: ""
+      port: 5432
+      username: ""
+      database: "app"
+      sslMode: "verify-full"
+      passwordSecret:
+        create: false
+        name: ""
+        key: "password"
+        value: ""
+      sslKeySecret:
+        name: ""
+        key: ""
+      sslCertSecret:
+        name: ""
+        key: ""
+      sslRootCertSecret:
+        name: ""
+        key: ""
+
+# Disable backups for test cluster
+backups:
+  enabled: true
+  endpointURL: "https://hel1.your-objectstorage.com"
+  endpointCA:
+    create: false
+    name: ""
+    key: ""
+    value: ""
+  destinationPath: ""
+  provider: s3
+  s3:
+    region: "us-east-1"
+    bucket: "data-team"
+    path: "/legacy-dev"
+    accessKey: "3I6STQIYG5R55JGNDP1Q"
+    secretKey: "eecSrCkWCpfiv98PZxme32wFX6hmfk6IL3HZkKRu"
+    inheritFromIAMRole: false
+  azure:
+    path: "/"
+    connectionString: ""
+    storageAccount: ""
+    storageKey: ""
+    storageSasToken: ""
+    containerName: ""
+    serviceName: blob
+    inheritFromAzureAD: false
+  google:
+    path: "/"
+    bucket: ""
+    gkeEnvironment: false
+    applicationCredentials: ""
+  secret:
+    create: true
+    name: "recovery-test-backup-s3-creds"
+
+  wal:
+    compression: gzip
+    encryption: AES256
+    maxParallel: 1
+  data:
+    compression: gzip
+    encryption: AES256
+    jobs: 2
+
+  scheduledBackups:
+    -
+      name: daily-backup
+      schedule: "0 0 2 * * *"
+      backupOwnerReference: self
+      method: barmanObjectStore
+
+  retentionPolicy: "15d"
