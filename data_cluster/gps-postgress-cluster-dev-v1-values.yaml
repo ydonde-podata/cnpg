@@ -1,0 +1,126 @@
+backups:
+  azure:
+    connectionString: ""
+    containerName: ""
+    inheritFromAzureAD: false
+    path: /
+    serviceName: blob
+    storageAccount: ""
+    storageKey: ""
+    storageSasToken: ""
+  data:
+    compression: gzip
+    encryption: ""
+    jobs: 2
+  destinationPath: s3://data-team/gps-dev
+  enabled: true
+  endpointCA:
+    create: false
+    key: ""
+    name: ""
+    value: ""
+  endpointURL: https://hel1.your-objectstorage.com
+  google:
+    applicationCredentials: ""
+    bucket: ""
+    gkeEnvironment: false
+    path: /
+  provider: s3
+  retentionPolicy: 15d
+  s3:
+    accessKey: 3I6STQIYG5R55JGNDP1Q
+    bucket: data-team
+    path: /gps-dev
+    region: us-east-1
+    secretKey: eecSrCkWCpfiv98PZxme32wFX6hmfk6IL3HZkKRu
+  scheduledBackups:
+  - backupOwnerReference: self
+    method: barmanObjectStore
+    name: daily-backup
+    schedule: 0 0 0 * * *
+  secret:
+    create: true
+  wal:
+    compression: gzip
+    encryption: ""
+    maxParallel: 1
+cluster:
+  additionalLabels: {}
+  affinity:
+    topologyKey: topology.kubernetes.io/zone
+  annotations: {}
+  certificates: null
+  enableSuperuserAccess: true
+  extensions:
+  - database: postgres
+    name: pg_stat_statements
+  imageName: ghcr.io/cloudnative-pg/postgis:16
+  imagePullPolicy: IfNotPresent
+  imagePullSecrets: []
+  initdb: {}
+  instances: 3
+  logLevel: info
+  monitoring:
+    customQueries: []
+    enabled: false
+    podMonitor:
+      enabled: true
+    prometheusRule:
+      enabled: true
+      excludeRules: []
+  postgresGID: 26
+  postgresUID: 26
+  postgresql:
+    parameters:
+      max_logical_replication_workers: "40"
+      max_sync_workers_per_subscription: "40"
+      max_worker_processes: "45"
+      timezone: Asia/Baku
+  primaryUpdateMethod: switchover
+  primaryUpdateStrategy: unsupervised
+  priorityClassName: ""
+  resources: {}
+  storage:
+    reclaimPolicy: Retain
+    size: 50Gi
+    storageClass: ""
+  superuserSecret: ""
+fullnameOverride: ""
+mode: standalone
+nameOverride: ""
+poolers: []
+recovery:
+  azure:
+    connectionString: ""
+    containerName: ""
+    inheritFromAzureAD: false
+    path: /
+    serviceName: blob
+    storageAccount: ""
+    storageKey: ""
+    storageSasToken: ""
+  backupName: ""
+  clusterName: ""
+  destinationPath: s3://data-team/gps-dev
+  endpointCA:
+    create: false
+    key: ""
+    name: ""
+    value: ""
+  endpointURL: https://hel1.your-objectstorage.com
+  google:
+    applicationCredentials: ""
+    bucket: ""
+    gkeEnvironment: false
+    path: /
+  method: backup
+  pitrTarget:
+    time: ""
+  provider: s3
+  s3:
+    accessKey: 3I6STQIYG5R55JGNDP1Q
+    bucket: data-team
+    path: /gps-dev
+    region: us-east-1
+    secretKey: eecSrCkWCpfiv98PZxme32wFX6hmfk6IL3HZkKRu
+type: postgis

@@ -1,0 +1,12 @@
+# Manual backup. Tested for all cnpg clusters, just change the name, cluster name and namespace.
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Backup
+metadata:
+  name: gps-dev-manual-backup-20251113 
+  namespace: gps-postgress-dev
+spec:
+  cluster:
+    name: gps-postgress-cluster-dev-v1
+  method: barmanObjectStore
+  target: primary

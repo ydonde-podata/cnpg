@@ -1,0 +1,161 @@
+backups:
+  data:
+    compression: gzip
+    encryption: ""
+    jobs: 2
+  enabled: true
+  endpointURL: https://hel1.your-objectstorage.com
+  provider: s3
+  retentionPolicy: 15d
+  s3:
+    accessKey: 3I6STQIYG5R55JGNDP1Q
+    bucket: data-team
+    path: /legacy-dev
+    region: us-east-1
+    secretKey: eecSrCkWCpfiv98PZxme32wFX6hmfk6IL3HZkKRu
+  scheduledBackups:
+  - backupOwnerReference: self
+    method: barmanObjectStore
+    name: daily-backup
+    schedule: 0 0 0 * * *
+  secret:
+    create: true
+  wal:
+    compression: gzip
+    encryption: ""
+    maxParallel: 1
+cluster:
+  additionalLabels: {}
+  affinity:
+    topologyKey: topology.kubernetes.io/zone
+  annotations: {}
+  certificates: {}
+  enablePDB: true
+  enableSuperuserAccess: true
+  extensions:
+  - database: postgres
+    name: pg_stat_statements
+  imageCatalogRef: {}
+  imageName: ghcr.io/cloudnative-pg/postgis:16
+  imagePullPolicy: IfNotPresent
+  imagePullSecrets: []
+  initdb: {}
+  instances: 3
+  logLevel: info
+  monitoring:
+    customQueries: []
+    customQueriesSecret: []
+    disableDefaultQueries: false
+    enabled: false
+    podMonitor:
+      enabled: true
+      metricRelabelings: []
+      relabelings: []
+    prometheusRule:
+      enabled: true
+      excludeRules: []
+  postgresGID: 26
+  postgresUID: 26
+  postgresql:
+    parameters:
+      max_connections: "300"
+      max_logical_replication_workers: "40"
+      max_sync_workers_per_subscription: "40"
+      max_worker_processes: "45"
+      timezone: Asia/Baku
+    pg_hba: []
+    pg_ident: []
+    shared_preload_libraries:
+    - pg_stat_statements
+    synchronous: {}
+  primaryUpdateMethod: switchover
+  primaryUpdateStrategy: unsupervised
+  priorityClassName: ""
+  resources: {}
+  roles: []
+  serviceAccountTemplate: {}
+  services: {}
+  storage:
+    reclaimPolicy: Retain
+    size: 10Gi
+    storageClass: ""
+  superuserSecret: ""
+  walStorage:
+    enabled: false
+    size: 1Gi
+    storageClass: ""
+fullnameOverride: ""
+imageCatalog:
+  create: true
+  images: []
+mode: standalone
+nameOverride: ""
+namespaceOverride: ""
+poolers: []
+recovery:
+  azure:
+    connectionString: ""
+    containerName: ""
+    inheritFromAzureAD: false
+    path: /
+    serviceName: blob
+    storageAccount: ""
+    storageKey: ""
+    storageSasToken: ""
+  backupName: ""
+  clusterName: ""
+  destinationPath: s3://data-team/legacy-dev
+  endpointCA:
+    create: false
+    key: ""
+    name: ""
+    value: ""
+  endpointURL: https://hel1.your-objectstorage.com
+  google:
+    applicationCredentials: ""
+    bucket: ""
+    gkeEnvironment: false
+    path: /
+  method: backup
+  pgBaseBackup:
+    database: app
+    owner: ""
+    secret: ""
+    source:
+      database: app
+      host: ""
+      passwordSecret:
+        create: false
+        key: password
+        name: ""
+        value: ""
+      port: 5432
+      sslCertSecret:
+        key: ""
+        name: ""
+      sslKeySecret:
+        key: ""
+        name: ""
+      sslMode: verify-full
+      sslRootCertSecret:
+        key: ""
+        name: ""
+      username: ""
+  pitrTarget:
+    time: ""
+  provider: s3
+  s3:
+    accessKey: 3I6STQIYG5R55JGNDP1Q
+    bucket: data-team
+    inheritFromIAMRole: false
+    path: ""
+    region: ""
+    secretKey: eecSrCkWCpfiv98PZxme32wFX6hmfk6IL3HZkKRu
+  secret:
+    create: true
+    name: ""
+type: postgis
+version:
+  postgis: "3.4"
+  postgresql: "16"
+  timescaledb: "2.15"
